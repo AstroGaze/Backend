@@ -14,16 +14,9 @@ const movieSchema = mongoose.Schema(
       type: String,
       required: [true, "Por favor añade el año de lanzamiento de la película"],
     },
-    rating: {
-      type: Number,
+    poster: {
+      type: String,
       required: [true, "Por favor añade una calificación a la película"],
-      min: 0,
-      max: 10,
-    },
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
     },
   },
   {

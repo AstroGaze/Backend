@@ -53,6 +53,66 @@ const login = asyncHandler(async (req, res) => {
   }
 });
 
+const getUserById = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const user = await User.findById(userId).select("-password"); // Exclude password
+
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching user" });
+  }
+});
+
+const deleteUser = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const deletedUser = await User.findByIdAndDelete(userId);
+    if (!deletedUser) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Error deleting user" });
+  }
+});
+
+// Actualizar Usuario
+const updateUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error("Usuario no encontrado");
+  }
+
+  const { name, email, password } = req.body;
+
+  user.name = name || user.name;
+  user.email = email || user.email;
+  if (password) {
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+  }
+
+  const updatedUser = await user.save();
+
+  res.json({
+    _id: updatedUser._id,
+    name: updatedUser.name,
+    email: updatedUser.email,
+  });
+});
+
 const getUsers = asyncHandler(async (req, res) => {
   try {
     const users = await User.find().select("-password"); // Exclude the password field
@@ -79,4 +139,7 @@ module.exports = {
   login,
   showData,
   getUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
 };

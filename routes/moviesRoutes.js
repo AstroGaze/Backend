@@ -7,10 +7,13 @@ const {
   createMovie,
   updateMovie,
   deleteMovie,
+  getMovieById,
 } = require("../controllers/moviesController");
 
-router.route("/").get(protect, getMovies).post(protect, createMovie);
+router.route("/").get(getMovies).post(createMovie);
 
-router.route("/:id").delete(protect, deleteMovie).put(protect, updateMovie);
+router.route("/:id").delete(deleteMovie).put(protect, updateMovie);
+
+router.get("/getMovie/:id", getMovieById);
 
 module.exports = router;
