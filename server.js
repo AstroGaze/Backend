@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 // Rutas
 app.use("/api/movies", require("./routes/moviesRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/rentals", require("./routes/rentalRoutes"));
 
 // Middleware de manejo de errores
 app.use(errorHandler);
